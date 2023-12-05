@@ -6,6 +6,8 @@ const app = express();
 
 app.use(express.json());
 
+
+//start contact
 app.post('/submit', async (req, res) => {
   const { firstname, lastname, email, message } = req.body;
 
@@ -26,7 +28,7 @@ app.post('/submit', async (req, res) => {
 
 app.get('/posts', async (req, res) => {
   try {
-    const posts = await prisma.post.findMany();
+    const posts = await prisma.contact.findMany();
     res.status(200).json(posts);
   } catch (error) {
     res.status(500).send(error.message);
@@ -34,25 +36,25 @@ app.get('/posts', async (req, res) => {
 });
 
 app.get('/post/:id', async (req, res) => {
-  const { id } = req.params;
+  const postId = parseInt(req.params.id);
 
   try {
-    const post = await prisma.post.findUnique({
+    const post = await prisma.contact.findUnique({
       where: {
-        id: parseInt(id),
+        id: postId,
       },
     });
 
     if (post) {
       res.status(200).json(post);
     } else {
-      res.status(404).send('Post not found');
+      res.status(404).json({ error: 'Post not found' });
     }
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).json({ error: error.message });
   }
 });
-
+//selesai contact
 
 // Jalankan server
 const PORT = 3000;
