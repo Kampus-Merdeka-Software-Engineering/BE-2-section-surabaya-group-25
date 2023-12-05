@@ -1,0 +1,26 @@
+# Dependensi
+/node_modules
+
+# File lingkungan
+.env
+
+# Folder build
+/dist
+/build
+
+# Folder Prisma
+/prisma/migrations
+
+# Log
+*.log
+npm-debug.log*
+
+# File sistem operasi
+.DS_Store
+Thumbs.db
+
+# File editor
+.vscode
+.idea
+*.swp
+*.swo
