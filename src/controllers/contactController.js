@@ -1,14 +1,7 @@
-const express = require('express');
-const { PrismaClient } = require('@prisma/client');
+// src/controllers/contactController.js
+const prisma = require('../config/prisma');
 
-const prisma = new PrismaClient();
-const app = express();
-
-app.use(express.json());
-
-
-//start contact
-app.post('/submit', async (req, res) => {
+async function createContact(req, res) {
   const { firstname, lastname, email, message } = req.body;
 
   try {
@@ -24,18 +17,18 @@ app.post('/submit', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+}
 
-app.get('/posts', async (req, res) => {
+async function getContacts(req, res) {
   try {
     const posts = await prisma.contact.findMany();
     res.status(200).json(posts);
   } catch (error) {
     res.status(500).send(error.message);
   }
-});
+}
 
-app.get('/post/:id', async (req, res) => {
+async function getContactById(req, res) {
   const postId = parseInt(req.params.id);
 
   try {
@@ -53,11 +46,6 @@ app.get('/post/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
-//selesai contact
+}
 
-// Jalankan server
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+module.exports = { createContact, getContacts, getContactById };
