@@ -24,6 +24,14 @@ app.post('/submit', async (req, res) => {
   }
 });
 
+app.get('/posts', async (req, res) => {
+  try {
+    const posts = await prisma.post.findMany();
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
 app.get('/post/:id', async (req, res) => {
   const { id } = req.params;
