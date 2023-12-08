@@ -21,6 +21,7 @@ model Post {
   category String
   body     String
   gambar   String
+  uploadDate String
 }
 
 

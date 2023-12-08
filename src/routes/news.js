@@ -8,5 +8,7 @@ router.get('/get', newsController.getNews);
 router.get('/get/:id', newsController.getNewsById);
 router.put('/update/:id', newsController.putNewsById);
 router.delete('/delete/:id', newsController.deleteNewsById);
+router.get('/getcategory/:category', newsController.getNewsByCategory);
+
 
 module.exports = router;

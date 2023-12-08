@@ -1,0 +1,10 @@
+POST http://localhost:5500/contact/submit
+Content-Type: application/application/json
+{
+    "firstname":"John",
+    "firstname":"doe",
+    "email":"John@gmail.com",
+    "message" : "halo john"
+
+
+}

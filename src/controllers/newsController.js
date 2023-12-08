@@ -3,7 +3,7 @@ const prisma = require('../config/prisma');
 
 async function createNews(req, res) {
     
-    const { title, category, body, gambar } = req.body;
+    const { title, category, body, detail, gambar } = req.body;
 
     try {
         const newPost = await prisma.post.create({
@@ -11,7 +11,10 @@ async function createNews(req, res) {
             title,
             category,
             body,
+            detail,
             gambar,
+        
+            
         },
         });
         res.status(201).json(newPost);
@@ -28,7 +31,27 @@ async function getNews(req, res) {
         res.status(500).send(error.message);
     }
 }
-  
+
+async function getNewsByCategory(req, res) {
+    const category = req.params.category;
+
+    try {
+        const newsArticles = await prisma.post.findMany({
+            where: {
+                category: category,
+            },
+        });
+
+        if (newsArticles.length > 0) {
+            res.status(200).json(newsArticles);
+        } else {
+            res.status(404).json({ error: 'News articles not found in the specified category' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 async function getNewsById(req, res) {
     const postId = parseInt(req.params.id);
 
@@ -63,6 +86,7 @@ async function putNewsById(req, res) {
             category,
             body,
             gambar,
+            
         },
         });
 
@@ -88,4 +112,4 @@ async function deleteNewsById(req, res) {
     }
 }
   
-  module.exports = { createNews, getNews, getNewsById, putNewsById, deleteNewsById };
+  module.exports = { createNews, getNews, getNewsById, putNewsById, deleteNewsById, getNewsByCategory };
