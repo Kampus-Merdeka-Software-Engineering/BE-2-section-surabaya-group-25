@@ -1,23 +1,55 @@
 // src/controllers/newsController.js
 const prisma = require('../config/prisma');
+const path = require('path');
+const md5 = require('md5');
 
 async function createNews(req, res) {
-    
-    const { title, category, body, detail, gambar } = req.body;
+    const { title, category, body } = req.body;
 
     try {
-        const newPost = await prisma.post.create({
-        data: {
-            title,
-            category,
-            body,
-            detail,
-            gambar,
-        
-            
-        },
+        const gambar = req.files ? req.files.gambar : null;
+
+        if (!gambar) {
+            return res.status(400).json({ msg: "No File Uploaded" });
+        }
+
+        const fileSize = gambar.data.length;
+        const ext = path.extname(gambar.name);
+        const allowedType = ['.png', '.jpg', '.jpeg'];
+
+        if (!allowedType.includes(ext.toLowerCase())) {
+            return res.status(422).json({ msg: "Invalid Images" });
+        }
+
+        if (fileSize > 5000000) {
+            return res.status(422).json({ msg: "Image must be less than 5 MB" });
+        }
+
+        const fileName = md5(gambar.name) + ext;
+
+        gambar.mv('./public/images/' + fileName, async (err) => {
+            if (err) {
+                return res.status(500).json({ msg: err.message });
+            }
+
+            try {
+                const newPost = await prisma.post.create({
+                    data: {
+                        title,
+                        category,
+                        body,
+                        gambar: fileName,
+                    },
+                });
+
+                const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+                res.status(201).json({ ...newPost, gambar: url });
+
+            } catch (error) {
+                res.status(500).json({ error: error.message });
+            }
         });
-        res.status(201).json(newPost);
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

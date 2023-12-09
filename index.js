@@ -1,4 +1,5 @@
 const express = require('express');
+const FileUpload = require('express-fileupload');
 const contactRoutes = require('./src/routes/contact');
 const postRoutes = require('./src/routes/news');
 const cors = require('cors');
@@ -6,10 +7,12 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors());
+app.use(FileUpload())
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 app.use('/contact', contactRoutes);
 app.use('/news', postRoutes);
+app.use('/images', postRoutes);
 
 
 
