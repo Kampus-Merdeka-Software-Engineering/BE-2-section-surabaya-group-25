@@ -4,7 +4,7 @@ const path = require('path');
 const md5 = require('md5');
 
 async function createNews(req, res) {
-    const { title, category, body } = req.body;
+    const { title, category,introbody, body } = req.body;
 
     try {
         const gambar = req.files ? req.files.gambar : null;
@@ -37,8 +37,10 @@ async function createNews(req, res) {
                     data: {
                         title,
                         category,
+                        introbody,
                         body,
                         gambar: fileName,
+
                     },
                 });
 
@@ -106,7 +108,7 @@ async function getNewsById(req, res) {
 
 async function putNewsById(req, res) {
     const postId = parseInt(req.params.id);
-    const { title, category, body, gambar } = req.body;
+    const { title, category, introbody,body, gambar } = req.body;
 
     try {
         const updatedPost = await prisma.post.update({
@@ -116,8 +118,10 @@ async function putNewsById(req, res) {
         data: {
             title,
             category,
+            introbody,
             body,
             gambar,
+            
             
         },
         });
@@ -141,7 +145,7 @@ async function deleteNewsById(req, res) {
         res.status(200).json({ message: 'News article deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
-    }
+    }b 
 }
   
   module.exports = { createNews, getNews, getNewsById, putNewsById, deleteNewsById, getNewsByCategory };
