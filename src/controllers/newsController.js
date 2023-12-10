@@ -2,6 +2,7 @@
 const prisma = require('../config/prisma');
 const path = require('path');
 const md5 = require('md5');
+const { title } = require('process');
 
 async function createNews(req, res) {
     const { title, category,introbody, body } = req.body;
@@ -85,6 +86,25 @@ async function getNewsByCategory(req, res) {
         res.status(500).json({ error: error.message });
     }
 }
+async function getNewsByBody(req, res) {
+    const title = req.params.title; // Ganti category dengan title
+
+    try {
+        const newsArticles = await prisma.post.findMany({
+            where: {
+                title: title, // Gunakan title untuk pencarian
+            },
+        });
+
+        if (newsArticles.length > 0) {
+            res.status(200).json(newsArticles);
+        } else {
+            res.status(404).json({ error: 'News articles not found with the specified title' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
 
 async function getNewsById(req, res) {
     const postId = parseInt(req.params.id);
@@ -148,4 +168,4 @@ async function deleteNewsById(req, res) {
     }b 
 }
   
-  module.exports = { createNews, getNews, getNewsById, putNewsById, deleteNewsById, getNewsByCategory };
+  module.exports = { createNews, getNews, getNewsById, putNewsById, deleteNewsById, getNewsByCategory ,getNewsByBody};
