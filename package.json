@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "index.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -21,13 +21,15 @@
   "dependencies": {
     "@prisma/client": "^5.6.0",
     "axios": "^1.6.2",
+    "cli": "^1.0.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.3",
     "md5": "^2.3.0",
     "page": "^1.11.6",
     "path": "^0.12.7",
-    "prisma": "^5.6.0"
+    "prisma": "^5.6.0",
+    "railway": "^2.0.17"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
